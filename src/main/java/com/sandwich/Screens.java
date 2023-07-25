@@ -46,10 +46,11 @@ public class Screens {
 
             switch (orderScreenChoice.toUpperCase()) {
                 case "S":
-                    // Code to add sandwich
+                    //
                     return;
                 case "C":
-                    // Code to add chips
+                     Chips.addChips();
+                     //chips.addChips(orderList);
                     return;
                 case "D":
                     // Code to add drinks
@@ -64,6 +65,7 @@ public class Screens {
                     // Code to go back to home screen
                     continueOrder = false;
                     System.out.println("Returning to home screen.");
+                    System.out.println("--------------------------------------------------");
                     break;
                 default:
                     System.out.println("Error. Please choose a valid option.");
