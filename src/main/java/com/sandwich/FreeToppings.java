@@ -1,8 +1,6 @@
 package com.sandwich;
 
-public class Toppings {
-
-    public enum toppingsList {
+public enum FreeToppings {
         LETTUCE,
         GREEN_PEPPERS,
         ONIONS,
@@ -11,6 +9,11 @@ public class Toppings {
         CUCUMBERS,
         PICKLES,
         GUACEMOLE,
-        MUSHROOMS
-    }
+        MUSHROOMS,
+         MAYO,
+        MUSTARD,
+        KETCHUP,
+        RANCH,
+        THOUSAND_ISLANDS,
+        VINAIGRETTE
 }

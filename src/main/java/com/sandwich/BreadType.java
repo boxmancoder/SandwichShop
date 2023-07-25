@@ -1,7 +1,5 @@
 package com.sandwich;
 
-public class Bread {
-
 
     public enum BreadType {
         WHITE,
@@ -9,4 +7,3 @@ public class Bread {
         RYE,
         WRAP
     }
-}
