@@ -1,8 +1,14 @@
 package com.sandwich;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Screens {
+    private static ArrayList<ItemOrder> orderList = new ArrayList<ItemOrder>();
+    private static UUID orderNumber = UUID.randomUUID();
+    private static String formattedOrderNumber = orderNumber.toString().substring(0, 5);
+    private static Order currentOrder = new Order(formattedOrderNumber, orderList);
 
     static Scanner scanner = new Scanner(System.in);
     static  boolean appRunning = true;
@@ -17,9 +23,10 @@ public class Screens {
         String homeScreenChoice = scanner.nextLine();
 
             switch (homeScreenChoice) {
-                case "1" ->
+                case "1" -> {
                     // Calls the orderScreen method which takes you to a new menu
-                        Screens.orderScreen();
+                   orderScreen(currentOrder);
+                }
                 case "0" -> {
                     // Code for exit
                     System.out.println("Thanks for visiting! Good-Bye :D ");
@@ -30,37 +37,37 @@ public class Screens {
         }
     }
 
-    public static void orderScreen() {
+    public static void orderScreen(Order currentOrder) {
         boolean continueOrder = true;
 
         while (continueOrder) {
             System.out.println("Please choose from the following OPTIONS: ");
-            System.out.println("(S)  --->  Add SANDWICH");
-            System.out.println("(C)  --->  Add CHIPS");
-            System.out.println("(D)  --->  Add DRINKS");
-            System.out.println("(V)  --->  To VIEW Order");
-            System.out.println("(X)  --->  CANCEL Order");
-            System.out.println("(H)  --->  Back to HOME screen");
+            System.out.println("\tS * Add SANDWICH");
+            System.out.println("\tC * Add CHIPS");
+            System.out.println("\tD * Add DRINKS");
+            System.out.println("\tV * To VIEW Order");
+            System.out.println("\tX * CANCEL Order");
+            System.out.println("\tH * Back to HOME screen");
             System.out.print("Please ENTER your selection: ");
             String orderScreenChoice = scanner.nextLine();
 
             switch (orderScreenChoice.toUpperCase()) {
                 case "S":
                     //
-                    return;
+                    break;
                 case "C":
-                     Chips.addChips();
-                     //chips.addChips(orderList);
-                    return;
+                     //code to add chips
+                    Chips.addChips(Screens.currentOrder);
+                    break;
                 case "D":
-                    // Code to add drinks
-                    return;
+                   Drinks.addDrinks(Screens.currentOrder);
+                    break;
                 case "V":
                     // Code to view order
-                    return;
+                    break;
                 case "X":
                     // Code to cancel order
-                    return;
+                    break;
                 case "H":
                     // Code to go back to home screen
                     continueOrder = false;

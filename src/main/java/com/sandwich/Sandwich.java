@@ -4,9 +4,18 @@ import java.util.ArrayList;
 
 public class Sandwich extends ItemOrder {
     public enum SandwichSize{
-        FOUR_INCHES,
-        EIGHT_INCHES,
-        TWELVE_INCHES
+        FOUR_INCHES(4),
+        EIGHT_INCHES(8),
+        TWELVE_INCHES(12);
+
+        private final int value;
+        SandwichSize(int value){
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
     private final SandwichSize size;
     private final boolean isToasted;
@@ -23,6 +32,16 @@ public class Sandwich extends ItemOrder {
         meats = new ArrayList<Meats>();
         cheeses = new ArrayList<Cheese>();
         freeToppings =  new ArrayList<FreeToppings>();
+    }
+
+    public Sandwich(SandwichSize size, boolean isToasted, BreadType breadType, ArrayList<Meats> meats,
+                    ArrayList<Cheese> cheeses, ArrayList<FreeToppings> freeToppings){
+        this.size = size;
+        this.isToasted = isToasted;
+        this.breadType = breadType;
+        this.meats = meats;
+        this.cheeses = cheeses;
+        this.freeToppings = freeToppings;
     }
 
     public void addMeat(Meats.MeatTypes meatTypes, boolean extra){
@@ -62,4 +81,39 @@ public class Sandwich extends ItemOrder {
         double meatsPrice = meats.stream().mapToDouble(Meats::getPrice).sum();
         return sandwichPrice + cheesePrice + meatsPrice;
     }
+
+    @Override
+    public String stringFormat() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("CUSTOM SANDWICH: ")
+                .append("\n")
+                .append(size)
+                .append(isToasted ? " toasted" : "")
+                .append(" ")
+                .append(breadType)
+                .append("\n");
+
+        builder.append("MEAT: ");
+        for (Meats meat : meats) {
+            builder.append(meat.getMeatTypes()).append(", ");
+        }
+        builder.delete(builder.length() - 2, builder.length()); // Remove the extra comma and space
+
+        builder.append("\nCHEESE: ");
+        for (Cheese cheese : cheeses) {
+            builder.append(cheese.getCheeseType()).append(", ");
+        }
+        builder.delete(builder.length() - 2, builder.length()); // Remove the extra comma and space
+
+        builder.append("\nFREE TOPPINGS: ");
+        for (FreeToppings topping : freeToppings) {
+            builder.append(topping).append(", ");
+        }
+        builder.delete(builder.length() - 2, builder.length()); // Remove the extra comma and space
+
+        builder.append("\nSANDWICH TOTAL: $").append(String.format("%.2f", getPrice()));
+
+        return builder.toString();
+    }
+
 }
