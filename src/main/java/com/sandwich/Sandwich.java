@@ -1,6 +1,10 @@
 package com.sandwich;
 
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import static com.sandwich.Screens.orderScreen;
+
 
 public class Sandwich extends ItemOrder {
     public enum SandwichSize{
@@ -116,4 +120,173 @@ public class Sandwich extends ItemOrder {
         return builder.toString();
     }
 
-}
+    public static void addSandwich(Order currentOrder) {
+        Scanner userScanner = new Scanner(System.in);
+        System.out.println("Please enter the NUMBER of the SIZE of your sandwich: ");
+        for (SandwichSize sandwichSize : SandwichSize.values()) {
+            System.out.println("\t" + sandwichSize.getValue() + " * " + sandwichSize);
+        }
+
+        int userSizeInput = userScanner.nextInt();
+        userScanner.nextLine();
+
+        SandwichSize selectedSize = null;
+
+        for (SandwichSize size : SandwichSize.values()) {
+            if (size.getValue() == userSizeInput) {
+                selectedSize = size;
+                break;
+            }
+        }
+
+        if (selectedSize == null) {
+            System.out.println("Invalid Input.");
+            return;
+        }
+
+            System.out.println("Please enter the NUMBER of the type of BREAD: ");
+            for (BreadType breadType : BreadType.values()) {
+                System.out.println("\t" + breadType.getValue() + " * " + breadType);
+            }
+
+            int userBreadInput = userScanner.nextInt();
+            userScanner.nextLine();
+
+            BreadType selectedBread = null;
+
+            for (BreadType breadType : BreadType.values()) {
+                if (breadType.getValue() == userBreadInput) {
+                    selectedBread = breadType;
+                    break;
+
+                }
+            }
+            if (selectedBread == null) {
+                System.out.println("Invalid Input.");
+            }
+
+            System.out.println("Did you want your bread TOASTED? (Y/N)");
+            String toastedInput = userScanner.nextLine();
+            boolean isToasted = toastedInput.equalsIgnoreCase("y");
+
+            System.out.println("Please enter the NUMBER of the MEAT/s you want added: ");
+            for (Meats.MeatTypes meatType : Meats.MeatTypes.values()) {
+                System.out.println("\t" + meatType.getValue() + " * " + meatType);
+            }
+
+            String meatInput = userScanner.nextLine();
+            String[] meatNumbers = meatInput.split(" ");
+            ArrayList<Meats.MeatTypes> selectedMeats = new ArrayList<>();
+
+            for (String meatNumber : meatNumbers) {
+                int number = Integer.parseInt(meatNumber.trim());
+
+                boolean isValidMeat = false;
+                for (Meats.MeatTypes meatType : Meats.MeatTypes.values()) {
+                    if (meatType.getValue() == number) {
+                        selectedMeats.add(meatType);
+                        isValidMeat = true;
+                        break;
+                    }
+                }
+
+                if (!isValidMeat) {
+                    System.out.println("Invalid Input: " + number);
+                }
+            }
+
+            System.out.println("Do you want to add extra meat? (Y/N)");
+            String addExtraMeatInput = userScanner.nextLine();
+            boolean addExtraMeat = addExtraMeatInput.equalsIgnoreCase("y");
+
+            System.out.println("Please enter the NUMBER of the CHEESE/s you want added: ");
+            for (Cheese.CheeseType cheeseType : Cheese.CheeseType.values()) {
+                System.out.println("\t" + cheeseType.getValue() + " * " + cheeseType);
+            }
+            String cheeseInput = userScanner.nextLine();
+            String[] cheeseNumbers = cheeseInput.split(" ");
+            ArrayList<Cheese.CheeseType> selectedCheeseTypes = new ArrayList<>();
+
+            for (String cheeseNumber : cheeseNumbers) {
+                int number = Integer.parseInt(cheeseNumber.trim());
+
+                boolean isValidCheese = false;
+                for (Cheese.CheeseType cheeseType : Cheese.CheeseType.values()) {
+                    if (cheeseType.getValue() == number) {
+                        selectedCheeseTypes.add(cheeseType);
+                        isValidCheese = true;
+                        break;
+                    }
+                }
+                if (!isValidCheese) {
+                    System.out.println("Invalid Input: " + number);
+                }
+            }
+
+            System.out.println("Do you want extra cheese? (Y/N)");
+            String extraCheeseInput = userScanner.nextLine();
+            boolean addExtraCheese = extraCheeseInput.equalsIgnoreCase("y");
+
+            System.out.println("Please enter the NUMBER of the FREE TOPPING/s you want added or press ENTER to skip: ");
+            for (FreeToppings freeTopping : FreeToppings.values()) {
+                System.out.println("\t" + freeTopping.getValue() + " * " + freeTopping);
+            }
+
+            String toppingsInput = userScanner.nextLine();
+            String[] toppingsNumbers = toppingsInput.split(" ");
+            ArrayList<FreeToppings> selectedToppings = new ArrayList<>();
+
+            for (String toppingNumber : toppingsNumbers) {
+                int number = Integer.parseInt(toppingNumber.trim());
+
+                boolean isValidTopping = false;
+                for (FreeToppings freeTopping : FreeToppings.values()) {
+                    if (freeTopping.getValue() == number) {
+                        selectedToppings.add(freeTopping);
+                        isValidTopping = true;
+                        break;
+                    }
+                }
+                if (!isValidTopping){
+                    System.out.println("Invalid Input: " + number);
+                }
+            }
+
+            if (toppingsInput.isEmpty()) {
+                String[] toppingTypes = toppingsInput.split(",");
+                for (String topping : toppingTypes) {
+                    try {
+                        FreeToppings selectedTopping = FreeToppings.valueOf(topping.trim().toUpperCase());
+                        selectedToppings.add(selectedTopping);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Invalid topping: " + topping);
+                    }
+                }
+            }
+
+            Sandwich customSandwich = new Sandwich(selectedSize, isToasted, selectedBread);
+
+            for (Meats.MeatTypes meatType : selectedMeats) {
+                customSandwich.addMeat(meatType, addExtraMeat);
+            }
+
+            for (Cheese.CheeseType cheeseType : selectedCheeseTypes) {
+                customSandwich.addCheese(cheeseType, addExtraCheese);
+            }
+
+            for (FreeToppings topping : selectedToppings) {
+                customSandwich.addFreeToppings(topping);
+            }
+
+            if (currentOrder != null) {
+                currentOrder.getOrderItems().add(customSandwich);
+                System.out.println(customSandwich.stringFormat());
+            } else {
+                System.out.println("ERROR");
+            }
+
+            orderScreen(currentOrder);
+        }
+        }
+
+

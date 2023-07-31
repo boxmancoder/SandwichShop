@@ -53,7 +53,8 @@ public class Screens {
 
             switch (orderScreenChoice.toUpperCase()) {
                 case "S":
-                    //
+                    // This method adds the sandwich
+                    Sandwich.addSandwich(Screens.currentOrder);
                     break;
                 case "C":
                      //code to add chips
