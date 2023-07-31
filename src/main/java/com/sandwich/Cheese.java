@@ -2,15 +2,25 @@ package com.sandwich;
 
 public class Cheese extends ExtraCharge {
     public enum CheeseType {
-        AMERICAN,
-        PROVOLONE,
-        CHEDDAR,
-        SWISS
+        AMERICAN(1),
+        PROVOLONE(2),
+        CHEDDAR(3),
+        SWISS(4);
+
+        private final int value;
+        CheeseType(int value){
+            this.value = value;
+        }
+        public int getValue(){
+            return value;
+        }
     }
     private final Sandwich.SandwichSize size;
+    private final CheeseType cheeseType;
 
     public Cheese(CheeseType cheeseType, boolean hasExtra, Sandwich.SandwichSize size) {
         super(hasExtra);
+        this.cheeseType = cheeseType;
         this.size = size;
     }
     @Override
@@ -41,5 +51,9 @@ public class Cheese extends ExtraCharge {
          } else {
              return regularPrice;
          }
+    }
+
+    public CheeseType getCheeseType() {
+        return cheeseType;
     }
 }
