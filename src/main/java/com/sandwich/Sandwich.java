@@ -8,9 +8,9 @@ import static com.sandwich.Screens.orderScreen;
 
 public class Sandwich extends ItemOrder {
     public enum SandwichSize{
-        FOUR_INCHES(4),
-        EIGHT_INCHES(8),
-        TWELVE_INCHES(12);
+        FOUR_INCHES(1),
+        EIGHT_INCHES(2),
+        TWELVE_INCHES(3);
 
         private final int value;
         SandwichSize(int value){
@@ -127,8 +127,16 @@ public class Sandwich extends ItemOrder {
             System.out.println("\t" + sandwichSize.getValue() + " * " + sandwichSize);
         }
 
-        int userSizeInput = userScanner.nextInt();
-        userScanner.nextLine();
+        int userSizeInput;
+        while (true) {
+            String input = userScanner.nextLine().trim();
+            if (input.matches("\\d+") && input.length() == 1) {
+                userSizeInput = Integer.parseInt(input);
+                break;
+            } else {
+                System.out.println("Invalid Input. Please enter a single number for the size.");
+            }
+        }
 
         SandwichSize selectedSize = null;
 
@@ -144,60 +152,85 @@ public class Sandwich extends ItemOrder {
             return;
         }
 
-            System.out.println("Please enter the NUMBER of the type of BREAD: ");
-            for (BreadType breadType : BreadType.values()) {
-                System.out.println("\t" + breadType.getValue() + " * " + breadType);
+        System.out.println("Please enter the NUMBER of the type of BREAD: ");
+        for (BreadType breadType : BreadType.values()) {
+            System.out.println("\t" + breadType.getValue() + " * " + breadType);
+        }
+
+        int userBreadInput;
+        while (true) {
+            String input = userScanner.nextLine().trim();
+            if (input.matches("\\d+") && input.length() == 1) {
+                userBreadInput = Integer.parseInt(input);
+                break;
+            } else {
+                System.out.println("Invalid Input. Please enter a single number for the bread type.");
             }
+        }
 
-            int userBreadInput = userScanner.nextInt();
-            userScanner.nextLine();
+        BreadType selectedBread = null;
 
-            BreadType selectedBread = null;
-
-            for (BreadType breadType : BreadType.values()) {
-                if (breadType.getValue() == userBreadInput) {
-                    selectedBread = breadType;
-                    break;
-
-                }
+        for (BreadType breadType : BreadType.values()) {
+            if (breadType.getValue() == userBreadInput) {
+                selectedBread = breadType;
+                break;
             }
-            if (selectedBread == null) {
-                System.out.println("Invalid Input.");
+        }
+
+        if (selectedBread == null) {
+            System.out.println("Invalid Input.");
+            return;
+        }
+
+        System.out.println("Did you want your bread TOASTED? (Y/N)");
+
+        boolean isToasted;
+        while (true) {
+            String toastedInput = userScanner.nextLine().trim().toLowerCase();
+            if (toastedInput.equals("y") || toastedInput.equals("n")) {
+                isToasted = toastedInput.equals("y");
+                break;
+            } else {
+                System.out.println("Invalid Input. Please enter 'Y' for Yes or 'N' for No.");
             }
+        }
+        ArrayList<Meats.MeatTypes> selectedMeats = new ArrayList<>();
 
-            System.out.println("Did you want your bread TOASTED? (Y/N)");
-            String toastedInput = userScanner.nextLine();
-            boolean isToasted = toastedInput.equalsIgnoreCase("y");
+        System.out.println("Please enter the NUMBER of the MEAT you want added: ");
+        for (Meats.MeatTypes meatType : Meats.MeatTypes.values()) {
+            System.out.println("\t" + meatType.getValue() + " * " + meatType);
+        }
 
-            System.out.println("Please enter the NUMBER of the MEAT/s you want added: ");
-            for (Meats.MeatTypes meatType : Meats.MeatTypes.values()) {
-                System.out.println("\t" + meatType.getValue() + " * " + meatType);
+        int userMeatInput = 0;
+        while (true) {
+            String meatInput = userScanner.nextLine().trim();
+
+            // Use a regular expression to check if the input contains only a single number
+            if (meatInput.matches("\\d+") && meatInput.length() == 1) {
+                userMeatInput = Integer.parseInt(meatInput);
+                break;
+            } else {
+                System.out.println("Invalid Input: Please enter a single number for meat selection.");
             }
+        }
 
-            String meatInput = userScanner.nextLine();
-            String[] meatNumbers = meatInput.split(" ");
-            ArrayList<Meats.MeatTypes> selectedMeats = new ArrayList<>();
-
-            for (String meatNumber : meatNumbers) {
-                int number = Integer.parseInt(meatNumber.trim());
-
-                boolean isValidMeat = false;
-                for (Meats.MeatTypes meatType : Meats.MeatTypes.values()) {
-                    if (meatType.getValue() == number) {
-                        selectedMeats.add(meatType);
-                        isValidMeat = true;
-                        break;
-                    }
-                }
-
-                if (!isValidMeat) {
-                    System.out.println("Invalid Input: " + number);
-                }
+        boolean isValidMeat = false;
+        for (Meats.MeatTypes meatType : Meats.MeatTypes.values()) {
+            if (meatType.getValue() == userMeatInput) {
+                selectedMeats.add(meatType);
+                isValidMeat = true;
+                break;
             }
+        }
 
-            System.out.println("Do you want to add extra meat? (Y/N)");
-            String addExtraMeatInput = userScanner.nextLine();
-            boolean addExtraMeat = addExtraMeatInput.equalsIgnoreCase("y");
+        if (!isValidMeat) {
+            System.out.println("Invalid Input: " + userMeatInput);
+            return;
+        }
+
+        System.out.println("Do you want to add extra meat? (Y/N)");
+        String addExtraMeatInput = userScanner.nextLine();
+        boolean addExtraMeat = addExtraMeatInput.equalsIgnoreCase("y");
 
             System.out.println("Please enter the NUMBER of the CHEESE/s you want added: ");
             for (Cheese.CheeseType cheeseType : Cheese.CheeseType.values()) {
